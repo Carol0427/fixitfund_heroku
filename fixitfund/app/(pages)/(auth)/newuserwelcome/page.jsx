@@ -1,11 +1,11 @@
 "use client";
-import React, { useState, useEffect, useId } from 'react';
-import { LogIn, CircleUser, UserPen} from 'lucide-react';
-import { toast, ToastContainer } from 'react-toastify';
+import { CircleUser, LogIn, UserPen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useId, useState } from 'react';
+import Select from 'react-select';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { auth } from '../../../_lib/firebase';
-import Select from 'react-select';
 
 const NewUserWelcome = () => {
     const [firstName, setFirstName] = useState('');
@@ -13,18 +13,19 @@ const NewUserWelcome = () => {
     const [accountType, setType] = useState('');
     const router = useRouter();
     const [token, setToken] = useState('');
+    useEffect(() => {
+      if (typeof window !== "undefined") {
+          const savedToken = localStorage.getItem("Token");
+          setToken(savedToken);
+      }
+  }, []);
     if(!auth.currentUser){
         return router.push("/");
     }
     const userId = auth.currentUser.uid;
     const userEmail = auth.currentUser.email;
 
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            const savedToken = localStorage.getItem("Token");
-            setToken(savedToken);
-        }
-    }, []);
+    
 
     const classOptions = [
         { value: 'civ', label: 'Civilian'},
